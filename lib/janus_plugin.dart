@@ -595,7 +595,31 @@ class JanusPlugin {
         }
         if ((t.sender.track != null && t.sender.track!.kind == "video") || (t.receiver.track != null && t.receiver.track!.kind == "video")) {
           if (videoTransceiver == null) {
+            RTCRtpSender sender = t.sender;
+            RTCRtpParameters parameters = sender.parameters;
+            parameters.encodings = [
+              RTCRtpEncoding(
+                rid: 'h',
+                active: true,
+                maxBitrate: 900000,
+              ),
+              RTCRtpEncoding(
+                rid: 'm',
+                active: true,
+                maxBitrate: 300000,
+              ),
+              RTCRtpEncoding(
+                rid: 'l',
+                active: true,
+                maxBitrate: 100000,
+              ),
+            ];
+            t.sender.setParameters(parameters);
+            // t.sender
             videoTransceiver = t;
+            print("-----------------------------------------");
+            print(videoTransceiver?.sender?.parameters?.encodings![0]!.rid);
+            print("-----------------------------------------");
           }
         }
       });
